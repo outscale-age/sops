@@ -114,6 +114,7 @@ type creationRule struct {
 	KMS               string
 	AwsProfile        string `yaml:"aws_profile"`
 	Age               string `yaml:"age"`
+	AwsEndpoint       string `yaml:"aws_endpoint"`
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
@@ -197,7 +198,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range pgp.MasterKeysFromFingerprintString(cRule.PGP) {
 			keyGroup = append(keyGroup, k)
 		}
-		for _, k := range kms.MasterKeysFromArnString(cRule.KMS, kmsEncryptionContext, cRule.AwsProfile) {
+		for _, k := range kms.MasterKeysFromArnString(cRule.KMS, kmsEncryptionContext, cRule.AwsProfile, cRule.AwsEndpoint) {
 			keyGroup = append(keyGroup, k)
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(cRule.GCPKMS) {
